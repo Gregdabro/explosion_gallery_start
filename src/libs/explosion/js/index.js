@@ -1,6 +1,6 @@
+//перечисляем Links
 const defaultOptions = {
-    linkClass: '.cardLink',
-    linkImageClass: '.cardImage',
+    linkClass: '.card',
 };
 
 const explosionClassName = 'explosion';
@@ -31,7 +31,63 @@ const explosionActiveImageClassName = 'explosionImage_Active';
 const explosionNextShowingImageClassName = 'explosionImage_NextShowing';
 const explosionNextHiddenImageClassName = 'explosionImage_NextHidden';
 
-class ExplositionGallery {}
+class ExplositionGallery {
+    constructor(elementNode, options) {
+        this.options = {
+            ...defaultOptions,
+            ...options
+        };
+        // сохраняем elementNode
+        this.containerNode = elementNode;
+        //определяем linksNode
+        this.linkNodes = elementNode.querySelectorAll(this.options.linkClass);
+        // минимальная ширина и высота модального окна
+        this.minWidth = 1023;
+        this.minHeight = 600;
+        // padding модального окна
+        this.padding = 2 * 16;
+        // количество images с лева и права от активной модального окна(контейнера)
+        this.showingCount = 4;
+        // индекс текущей image
+        this.currentIndex = 0;
+        //колличество total images
+        this.size = this.linkNodes.length;
+        //инициализируем модальное окно
+        this.initModal();
+    }
+    
+    // создаем окно и кладем в body
+    initModal() {
+        this.modalContainerNode = document.createElement('div');
+        this.modalContainerNode.className = explosionClassName;
+        
+        this.modalContainerNode.innerHTML = `
+            <div class="${explosionSummaryClassName}">
+                <div class="${explosionSummaryContentClassName}">
+                    <h2 class="${explosionTitleClassName}"></h2>
+                    <p class="${explosionDescriptionClassName}"></p>
+                </div>
+            </div>
+            <div class="${explosionControlsClassName}">
+                <button class="${explosionCloseClassName}"></button>
+                <div class="${explosionNavsClassName}">
+                    <button class="${explosionNavClassName} ${explosionNavPrevClassName}"></button>
+                    <div class="${explosionCouterClassName}">
+                        1/${this.size}
+                    </div>
+                    <button class="${explosionNavClassName} ${explosionNavNextClassName}"></button>
+                </div>
+            </div>
+            <div class="${explosionImagesClassName}">
+                ${Array.from(this.linkNodes).map((linkNode) => `
+                    <img src="${linkNode.getAttribute('href')}" alt="${linkNode.dataset.title}" class="${explosionImageClassName}" data-title="${linkNode.dataset.title}" data-description="${linkNode.dataset.description}"/>
+                `).join('')}
+            </div>
+        `;
+
+         document.body.appendChild(this.modalContainerNode)
+    }
+}
 
 /**
  * Helpers
