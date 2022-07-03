@@ -94,7 +94,7 @@ class ExplositionGallery {
     events() {
         this.containerNode.addEventListener('click', this.activateGallery);
     }
-    // активация галереи
+    // активация галереи (стрелочная функция поэтому не теряем this)
     activateGallery = (event) => {
         event.preventDefault();
         //определяем клик по ссылке
@@ -106,7 +106,14 @@ class ExplositionGallery {
 
         // переопределяем текущий индекс image
         this.currentIndex = Array.from(this.linkNodes).findIndex((itemNode) => (linkNode === itemNode));
-        console.log('this.currentIndex', this.currentIndex)
+        
+        // добовляем состояния модального окна
+        this.modalContainerNode.classList.add(explosionOpeningClassName);
+
+        fadeIn(this.modalContainerNode, () => {
+            this.modalContainerNode.classList.remove(explosionOpeningClassName);
+            this.modalContainerNode.classList.add(explosionOpenedClassName);
+        });
     }
 }
 
