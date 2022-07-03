@@ -54,6 +54,8 @@ class ExplositionGallery {
         this.size = this.linkNodes.length;
         //инициализируем модальное окно
         this.initModal();
+        //определяем события 
+        this.events();
     }
     
     // создаем окно и кладем в body
@@ -86,6 +88,25 @@ class ExplositionGallery {
         `;
 
          document.body.appendChild(this.modalContainerNode)
+    }
+
+    // реализация событий
+    events() {
+        this.containerNode.addEventListener('click', this.activateGallery);
+    }
+    // активация галереи
+    activateGallery = (event) => {
+        event.preventDefault();
+        //определяем клик по ссылке
+        const linkNode = event.target.closest('a');
+
+        if(!linkNode) {
+            return;
+        }
+
+        // переопределяем текущий индекс image
+        this.currentIndex = Array.from(this.linkNodes).findIndex((itemNode) => (linkNode === itemNode));
+        console.log('this.currentIndex', this.currentIndex)
     }
 }
 
