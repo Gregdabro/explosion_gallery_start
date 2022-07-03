@@ -8,14 +8,13 @@ html(lang="ru")
         link(rel="stylesheet" href="/libs/explosion/css/index.css")
         script(src="/libs/explosion/js/index.js")
     body
-        - var images = require(__dirname + "/src/data.json");
+        - var images = require(__dirname + "/src/data.json");//- relo
         .page
             h1.title Explosion gallery
             .gallery
                 each image in images
-                    .galleryItem
-                        .card
-                            a.cardLink(href=image.src target="_blank" data-title=image.title data-description=image.description)
+                    .galleryItem 
+                        a.card(href=image.src target="_blank" data-title=image.title data-description=image.description)
                                 .cardContent
                                     h3.cardTitle=image.title
                                     p.cardDescription=image.description
